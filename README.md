@@ -1,0 +1,2 @@
+# ethdash
+Ethereum Dashboard CLI
