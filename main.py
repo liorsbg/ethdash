@@ -1,12 +1,13 @@
 import os
 import time
 import logging
+import json
 from datetime import datetime
 from pprint import pprint
 from web3 import Web3, IPCProvider
 # from models import Blocks
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 IPC_PATH = os.getenv('IPC_PATH', '/root/parity/.local/share/io.parity.ethereum/jsonrpc.ipc') # '/root/geth1/.ethereum/geth.ipc')
 
@@ -15,6 +16,13 @@ web3 = Web3(provider)
 eth = web3.eth
 
 blocks = Blocks(eth)
+
+erc20_abi = json.load(open('/root/parity/ECR20ABI.json')) 
+eos_address = '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0'
+eos_contract = eth.contract(address=eos_address, abi=erc20_abi)
+
+def get_EOS_transfers(block): 
+    return eos_contract.pastEvents("Transfer").get()
 
 # calculated ahead of time to save time.
 last_summed_tx_block = 5328751
@@ -35,6 +43,7 @@ def min_gas_price_for_block(block):
         # TODO: review this assumption
         return 0
 
+
 def display_block_info(block_hash):
     print(f'New Block: {block_hash}')
     block = eth.getBlock(block_hash)
@@ -42,7 +51,8 @@ def display_block_info(block_hash):
         'number of blocks': block.number,
         'last block confirmation time': datetime.fromtimestamp(block.timestamp).isoformat(),
         'total transactions': sum_transactions(),
-        'minimum gas price for last block': min_gas_price_for_block(block)
+        'minimum gas price for last block': min_gas_price_for_block(block),
+        'eos_transfers': get_EOS_transfers(block)
     })
 
 latest_block_filter = eth.filter('latest')

@@ -25,7 +25,7 @@ dt.fromtimestamp(eth.getBlock('latest').timestamp)
 
 eth.getTransaction('latest')
 
-ecr20_abi = json.load(open('ECR20ABI.json', 'r'))
+erc20_abi = json.load(open('/root/parity/ECR20ABI.json')) 
 eos_address = '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0'
 eos_contract = eth.contract(address=eos_address, abi=ecr20_abi)
 def get_EOS_transfers(block): 
