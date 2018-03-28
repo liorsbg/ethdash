@@ -1,14 +1,13 @@
 import logging
 from .connect import eth
 from .models import Blocks
+from .utils import save_local_json, load_local_json, load_tx_total_cache
 
 blocks = Blocks(eth)
 
-# calculated ahead of time to save time.
-last_summed_tx_block = 5335940
-last_summed_tx_total = 191447833
-# TODO: If not up to date, run this in background and return 'calculating...'
-# persist this somehwere (db/file)
+last_summed_tx_block, last_summed_tx_total = load_tx_total_cache()
+
+
 def sum_transactions():
     global last_summed_tx_block, last_summed_tx_total
     for b in blocks[last_summed_tx_block + 1:]:

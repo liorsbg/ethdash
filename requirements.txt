@@ -18,6 +18,7 @@ eth-keys==0.2.0b3
 eth-rlp==0.1.0
 eth-tester==0.1.0b21
 eth-utils==1.0.1
+gevent==1.2.2
 hexbytes==0.1.0
 idna==2.6
 idna-ssl==1.0.1

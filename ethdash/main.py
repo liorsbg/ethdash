@@ -1,18 +1,18 @@
 import os
-import asyncio
 from functools import partial
+import gevent
 from .connect import eth
 from .views import format_block_info, format_token_transfers
 from .tokens import generate_token_contracts
+from .utils import print_flush, cache_tx_total
 
 
-async def display_loop(filter_formatters, poll_interval=1):
+def fetch_and_print(event_filter, formatter, poll_interval):
     while True:
-        for event_filter, formatter in filter_formatters.items():
-            new_entries = event_filter.get_new_entries()
-            if new_entries:
-                print(formatter(new_entries))
-        await asyncio.sleep(poll_interval)
+        new_entries = event_filter.get_new_entries()
+        if new_entries:
+            print_flush(formatter(new_entries))
+        gevent.sleep(poll_interval)
 
 
 def main():
@@ -24,12 +24,16 @@ def main():
         **{token_filter: partial(format_token_transfers, ticker)
            for ticker, token_filter in token_transfer_filters.items()}
     }
-    loop = asyncio.get_event_loop()
+
     try:
-        loop.run_until_complete(asyncio.gather(
-            display_loop(filter_formatters, 1)))
+        pollers = [gevent.spawn(fetch_and_print, event_filter, formatter, poll_interval)
+                   for event_filter, formatter in filter_formatters.items()]
+        print('Starting event filter pollers')
+        gevent.joinall(pollers)
     finally:
-        loop.close()
+        gevent.killall(pollers)
+        from .calculate_stats import last_summed_tx_block, last_summed_tx_total
+        cache_tx_total(last_summed_tx_block, last_summed_tx_total)
 
 
 if __name__ == '__main__':

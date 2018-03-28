@@ -6,8 +6,14 @@ services:
     volumes:
       - ${EXISTING_PARITY_BASE_PATH:-parity-data}:/parity-data
     working_dir: /parity-data
-    command: ["--base-path=/parity-data",
+    command: ["--base-path=/parity-data", 
+              "--jsonrpc-port=58545", 
+              "--jsonrpc-interface=all",
+              "--jsonrpc-hosts=all",
+              "--jsonrpc-cors=all",
               "--jsonrpc-threads=20"]
+    ports: 
+      - "58545:58545"
 
   # geth-node:
   #   image: "ethereum/client-go:latest"
@@ -19,12 +25,14 @@ services:
   ethdash:
     build: .
     environment:
-      - WEB3_PROVIDER_URI=${WEB3_PROVIDER_URI:-file:///parity-data/jsonrpc.ipc}
+      - WEB3_PROVIDER_URI=file:///parity-data/jsonrpc.ipc
     volumes:
       - ${EXISTING_PARITY_BASE_PATH:-parity-data}:/parity-data
     command: ["python", "-W", "ignore", "-m", "ethdash.main"]
     stdin_open: true
     tty: true
+    depends_on: 
+      - parity-node
 
 
 volumes:
