@@ -7,7 +7,7 @@ from .tokens import generate_token_contracts
 from .utils import print_flush, cache_tx_total
 
 
-def fetch_and_print(event_filter, formatter, poll_interval):
+def fetch_and_print(event_filter, formatter, poll_interval=1):
     while True:
         new_entries = event_filter.get_new_entries()
         if new_entries:
@@ -26,7 +26,7 @@ def main():
     }
 
     try:
-        pollers = [gevent.spawn(fetch_and_print, event_filter, formatter, poll_interval)
+        pollers = [gevent.spawn(fetch_and_print, event_filter, formatter)
                    for event_filter, formatter in filter_formatters.items()]
         print('Starting event filter pollers')
         gevent.joinall(pollers)
