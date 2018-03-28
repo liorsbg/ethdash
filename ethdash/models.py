@@ -7,6 +7,8 @@ class Blocks:
     >> blocks[0]    # First block
     >> blocks[-1]   # Latest block
     >> blocks[-3:]  # Last 3 blocks
+    >> for b in blocks[-100:]: # lazily iterate over the last 100 blocks
+    >>     # do cool stuff
     '''
     def __init__(self, eth):
         self._eth = eth
