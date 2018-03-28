@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  parity-node:
+    image: "parity/parity:latest"
+    volumes:
+      - ${EXISTING_PARITY_BASE_PATH:-parity-data}:/parity-data
+    working_dir: /parity-data
+    command: ["--base-path", "/parity-data"]
+
+  # geth-node:
+  #   image: "ethereum/client-go:latest"
+  #   volumes:
+  #     - geth-data:/geth
+  #   working_dir: /geth
+  #   command: ["--syncmode", "fast", "--cache", "4096"]
+  
+  ethdash:
+    build: .
+    environment:
+      - WEB3_PROVIDER_URI=file:///parity-data/jsonrpc.ipc
+    volumes:
+      - ${EXISTING_PARITY_BASE_PATH:-parity-data}/jsonrpc.ipc:/parity-data/jsonrpc.ipc
+    command: ["python", "-W", "ignore", "-m", "ethdash.main"]
+    stdin_open: true
+    tty: true
+
+
+volumes:
+  parity-data:
+  # geth-data:
