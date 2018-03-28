@@ -1,12 +1,19 @@
 # EthDash
 
+### TLDR
+
+```sh
+WEB3_PROVIDER_URI=http://ethdash.pw:98545 docker-compose up -d ethdash
+docker-compose logs --tail=10 -f ethdash
+```
+
+#### Run a new node
+
 To spin up a brand new ethereum node and ethdash server, make sure you have a fast drive with lots (~80GB+) of empty space and a good internet connection, then run:
 
 `docker-compose up -d`
 
-
-
-If you already have a running parity node:
+#### Connect to a running parity node
 
 for http or ws connections (e.g. http://localhost:8545) :
 
