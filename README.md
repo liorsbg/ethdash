@@ -3,7 +3,7 @@
 ### TLDR
 
 ```sh
-WEB3_PROVIDER_URI=http://ethdash.pw:98545 docker-compose up -d ethdash
+WEB3_PROVIDER_URI=http://ethdash.pw:58545 docker-compose up -d ethdash
 docker-compose logs --tail=10 -f ethdash
 ```
 

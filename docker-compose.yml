@@ -6,7 +6,7 @@ services:
     volumes:
       - ${EXISTING_PARITY_BASE_PATH:-parity-data}:/parity-data
     working_dir: /parity-data
-    command: ["--base-path", "/parity-data"]
+    command: ["--base-path", "/parity-data", "--jsonrpc-port", "58545"]
 
   # geth-node:
   #   image: "ethereum/client-go:latest"
