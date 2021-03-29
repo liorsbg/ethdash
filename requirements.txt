@@ -37,7 +37,7 @@ py-evm==0.2.0a12
 pycparser==2.18
 pycryptodome==3.5.1
 pyethash==0.1.27
-Pygments==2.2.0
+Pygments==2.7.4
 requests==2.18.4
 rlp==0.6.0
 semantic-version==2.6.0
